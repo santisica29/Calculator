@@ -42,11 +42,13 @@ public class Calculator
                 break;
             case "d":
                 // Ask the user to enter a non-zero divisor.
-                if (num2 != 0)
+                while (num2 == 0)
                 {
-                    result = num1 / num2;
-                    writer.WriteValue("Divide");
+                    Console.WriteLine("You can't divide by 0. Pick another number");
+                    num2 = int.Parse(Console.ReadLine());
                 }
+                result = num1 / num2;
+                writer.WriteValue("Divide");
                 break;
             // Return text for an incorrect option entry.
             default:
