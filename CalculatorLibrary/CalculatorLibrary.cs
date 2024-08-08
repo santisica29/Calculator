@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace CalculatorLibrary;
 public class Calculator
 {
-
+    int timesItWasUsed = 0;
     JsonWriter writer;
     public Calculator()
     {
@@ -54,6 +54,7 @@ public class Calculator
             default:
                 break;
         }
+        timesItWasUsed++;
         writer.WritePropertyName("Result");
         writer.WriteValue(result);
         writer.WriteEndObject();
@@ -63,8 +64,17 @@ public class Calculator
 
     public void Finish()
     {
+        CountTimesTheCalcWasUsed(timesItWasUsed);
         writer.WriteEndArray();
         writer.WriteEndObject();
         writer.Close();
+    }
+
+    public void CountTimesTheCalcWasUsed(int timesItWasUsed)
+    {
+        writer.WriteStartObject();
+        writer.WritePropertyName("Times the calc was used");
+        writer.WriteValue(timesItWasUsed);
+        writer.WriteEndObject();
     }
 }
