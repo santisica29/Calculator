@@ -14,6 +14,7 @@ class Program
         Calculator calc = new Calculator();
         while (!endApp)
         {
+            Console.Clear();
             // Declare variables and set to empty.
             // Use Nullable types (with ?) to match type of System.Console.ReadLine
             string? numInput1 = "";
@@ -76,12 +77,42 @@ class Program
             Console.WriteLine("------------------------\n");
 
             // Wait for the user to respond before closing.
-            Console.Write("Press 'n' and Enter to close the app, or press any other key and Enter to continue: ");
-            if (Console.ReadLine() == "n") endApp = true;
+            Console.Write(@"Press 'n' and Enter to close the app, 
+'v' to view the latest calculations 
+or press any other key and Enter to continue: ");
 
-            Console.WriteLine("\n"); // Friendly linespacing.
+            string? choice = Console.ReadLine().ToLower();
+
+            if (choice == "v")
+            {
+                Console.Clear();
+
+                if (calc.GetLatestCalculations() == null) Console.WriteLine("The list is empty");
+
+                else
+                {
+                    Console.WriteLine("Latest Calculations!");
+                    foreach (var c in calc.GetLatestCalculations())
+                    {
+                        Console.WriteLine(c);
+                    }
+
+                    Console.WriteLine("----------------------------");
+                    Console.Write("Press 'o' to delete the list: ");
+
+                    if (Console.ReadLine().ToLower() == "o")
+                    {
+                        Console.WriteLine("List deleted.");
+                        calc.DeleteList();
+                    }
+                }
+                Console.ReadLine();
+                Console.Clear();
+            }
+            
+            if (choice == "n") endApp = true;
+            Console.WriteLine("\n"); // Friendly linespacing;
         }
-
         calc.Finish();
         return;
     }

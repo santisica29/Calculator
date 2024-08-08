@@ -5,6 +5,8 @@ namespace CalculatorLibrary;
 public class Calculator
 {
     int timesItWasUsed = 0;
+    List<double> latestCalculations = new();
+
     JsonWriter writer;
     public Calculator()
     {
@@ -55,6 +57,8 @@ public class Calculator
                 break;
         }
         timesItWasUsed++;
+        latestCalculations.Add(result);
+
         writer.WritePropertyName("Result");
         writer.WriteValue(result);
         writer.WriteEndObject();
@@ -76,5 +80,20 @@ public class Calculator
         writer.WritePropertyName("Times the calc was used");
         writer.WriteValue(timesItWasUsed);
         writer.WriteEndObject();
+    }
+
+    public List<double> GetLatestCalculations()
+    {
+        if (latestCalculations.Count == 0)
+        {
+            return null;
+        }
+
+        return latestCalculations;
+    }
+
+    public void DeleteList()
+    {
+        latestCalculations.Clear();
     }
 }
