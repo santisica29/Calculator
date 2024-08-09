@@ -19,17 +19,86 @@ class Program
             // Use Nullable types (with ?) to match type of System.Console.ReadLine
             string? numInput1 = "";
             string? numInput2 = "";
+            double cleanNum1 = 0;
             double result = 0;
 
-            // Ask the user to type the first number.
-            Console.Write("Type a number, and then press Enter: ");
-            numInput1 = Console.ReadLine();
+            Console.WriteLine("Choose 'n' to make a new calculation or 'v' to view your latest calculations\n");
+            var choice = Console.ReadLine().ToLower().Trim();
 
-            double cleanNum1 = 0;
-            while (!double.TryParse(numInput1, out cleanNum1))
+            while (choice != "n" && choice != "v")
             {
-                Console.Write("This is not valid input. Please enter a numeric value: ");
+                Console.WriteLine("Invalid input. Try Again.");
+                choice = Console.ReadLine().ToLower().Trim();
+            }
+
+            if (choice == "v")
+            {
+                Console.Clear();
+                Console.WriteLine("Latest Calculations:\n");
+
+                List<string> list = calc.GetLatestsCalculations();
+
+                if (list == null)
+                {
+                    Console.WriteLine("List is empty");
+                }
+                else
+                {
+                    foreach (var c in list)
+                    {
+                        Console.WriteLine(c);
+                    }
+
+                    Console.WriteLine("Press 'd' to delete the list");
+                    Console.WriteLine("'n' to start a new calculation");
+                    Console.WriteLine("'u' to use one of the latest results to make a new operation");
+                    var input = Console.ReadLine().ToLower().Trim();
+
+                    while (input != "n" && input != "u" && input != "d")
+                    {
+                        Console.WriteLine("Invalid input");
+                        input = Console.ReadLine().ToLower();
+                    }
+
+                    if (input == "d")
+                    {
+                        calc.DeleteLists();
+                        Console.WriteLine("List Deleted");
+                        Console.ReadLine();
+                    }
+
+                    if (input == "u")
+                    {
+                        Console.Clear();
+                        var listR = calc.GetLatestsResults();
+
+                        Console.WriteLine("Latest results: \n");
+                        foreach (var item in listR)
+                        {
+                            Console.Write($"{item}. y/n ");
+                            var c = Console.ReadLine().ToLower();
+
+                            if (c == "y")
+                            {
+                                cleanNum1 = item;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (cleanNum1 == 0)
+            {
+                // Ask the user to type the first number.
+                Console.Write("Type a number, and then press Enter: ");
                 numInput1 = Console.ReadLine();
+
+                while (!double.TryParse(numInput1, out cleanNum1))
+                {
+                    Console.Write("This is not valid input. Please enter a numeric value: ");
+                    numInput1 = Console.ReadLine();
+                }
             }
 
             // Ask the user to type the second number.
@@ -77,40 +146,9 @@ class Program
             Console.WriteLine("------------------------\n");
 
             // Wait for the user to respond before closing.
-            Console.Write(@"Press 'n' and Enter to close the app, 
-'v' to view the latest calculations 
-or press any other key and Enter to continue: ");
+            Console.Write(@"Press 'n' and Enter to close the app, or press any other key and Enter to continue: ");
+            if (Console.ReadLine().ToLower() == "n") endApp = true;
 
-            string? choice = Console.ReadLine().ToLower();
-
-            if (choice == "v")
-            {
-                Console.Clear();
-
-                if (calc.GetLatestCalculations() == null) Console.WriteLine("The list is empty");
-
-                else
-                {
-                    Console.WriteLine("Latest Calculations!");
-                    foreach (var c in calc.GetLatestCalculations())
-                    {
-                        Console.WriteLine(c);
-                    }
-
-                    Console.WriteLine("----------------------------");
-                    Console.Write("Press 'o' to delete the list: ");
-
-                    if (Console.ReadLine().ToLower() == "o")
-                    {
-                        Console.WriteLine("List deleted.");
-                        calc.DeleteList();
-                    }
-                }
-                Console.ReadLine();
-                Console.Clear();
-            }
-            
-            if (choice == "n") endApp = true;
             Console.WriteLine("\n"); // Friendly linespacing;
         }
         calc.Finish();

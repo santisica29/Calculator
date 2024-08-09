@@ -4,8 +4,9 @@ using Newtonsoft.Json;
 namespace CalculatorLibrary;
 public class Calculator
 {
-    int timesItWasUsed = 0;
-    List<double> latestCalculations = new();
+    int timesCalcWasUsed = 0;
+    List<string> latestCalculations = new();
+    List<double> latestResults = new List<double>();
 
     JsonWriter writer;
     public Calculator()
@@ -21,6 +22,7 @@ public class Calculator
     public double DoOperation(double num1, double num2, string op)
     {
         double result = double.NaN; // Default value is "not-a-number" if an operation, such as division, could result in an error.
+        string operand = string.Empty;
         writer.WriteStartObject();
         writer.WritePropertyName("Operand1");
         writer.WriteValue(num1);
@@ -33,14 +35,17 @@ public class Calculator
             case "a":
                 result = num1 + num2;
                 writer.WriteValue("Add");
+                operand = "+";
                 break;
             case "s":
                 result = num1 - num2;
                 writer.WriteValue("Substract");
+                operand = "-";
                 break;
             case "m":
                 result = num1 * num2;
                 writer.WriteValue("Multiply");
+                operand = "*";
                 break;
             case "d":
                 // Ask the user to enter a non-zero divisor.
@@ -51,13 +56,15 @@ public class Calculator
                 }
                 result = num1 / num2;
                 writer.WriteValue("Divide");
+                operand = "/";
                 break;
             // Return text for an incorrect option entry.
             default:
                 break;
         }
-        timesItWasUsed++;
-        latestCalculations.Add(result);
+        timesCalcWasUsed++;
+        latestCalculations.Add($"{num1} {operand} {num2} = {result}");
+        latestResults.Add(result);
 
         writer.WritePropertyName("Result");
         writer.WriteValue(result);
@@ -68,7 +75,7 @@ public class Calculator
 
     public void Finish()
     {
-        CountTimesTheCalcWasUsed(timesItWasUsed);
+        CountTimesTheCalcWasUsed(timesCalcWasUsed);
         writer.WriteEndArray();
         writer.WriteEndObject();
         writer.Close();
@@ -82,18 +89,23 @@ public class Calculator
         writer.WriteEndObject();
     }
 
-    public List<double> GetLatestCalculations()
+    public List<string> GetLatestsCalculations()
     {
-        if (latestCalculations.Count == 0)
-        {
-            return null;
-        }
+        if (latestCalculations.Count == 0) return null;
 
         return latestCalculations;
     }
 
-    public void DeleteList()
+    public List<double> GetLatestsResults()
+    {
+        if(latestResults.Count == 0) return null;
+        
+        return latestResults;
+    }
+
+    public void DeleteLists()
     {
         latestCalculations.Clear();
+        latestResults.Clear();
     }
 }
