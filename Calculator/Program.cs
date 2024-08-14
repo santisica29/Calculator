@@ -22,73 +22,9 @@ class Program
             double cleanNum1 = 0;
             double result = 0;
 
-            Console.WriteLine("Choose 'n' to make a new calculation or 'v' to view your latest calculations\n");
-            var choice = Console.ReadLine().ToLower().Trim();
+            double res = ShowMenu(ref calc);
 
-            while (choice != "n" && choice != "v")
-            {
-                Console.WriteLine("Invalid input. Try Again.");
-                choice = Console.ReadLine().ToLower().Trim();
-            }
-
-            if (choice == "v")
-            {
-                Console.Clear();
-                Console.WriteLine("Latest Calculations:\n");
-
-                List<string> list = calc.GetLatestsCalculations();
-
-                if (list == null)
-                {
-                    Console.WriteLine("List is empty");
-                }
-                else
-                {
-                    foreach (var c in list)
-                    {
-                        Console.WriteLine(c);
-                    }
-
-                    Console.WriteLine("Press 'd' to delete the list");
-                    Console.WriteLine("'n' to start a new calculation");
-                    Console.WriteLine("'u' to use one of the latest results to make a new operation");
-                    var input = Console.ReadLine().ToLower().Trim();
-
-                    while (input != "n" && input != "u" && input != "d")
-                    {
-                        Console.WriteLine("Invalid input");
-                        input = Console.ReadLine().ToLower();
-                    }
-
-                    if (input == "d")
-                    {
-                        calc.DeleteLists();
-                        Console.WriteLine("List Deleted");
-                        Console.ReadLine();
-                    }
-
-                    if (input == "u")
-                    {
-                        Console.Clear();
-                        var listR = calc.GetLatestsResults();
-
-                        Console.WriteLine("Latest results: \n");
-                        foreach (var item in listR)
-                        {
-                            Console.Write($"{item}. y/n ");
-                            var c = Console.ReadLine().ToLower();
-
-                            if (c == "y")
-                            {
-                                cleanNum1 = item;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (cleanNum1 == 0)
+            if (res == 0)
             {
                 // Ask the user to type the first number.
                 Console.Write("Type a number, and then press Enter: ");
@@ -99,6 +35,10 @@ class Program
                     Console.Write("This is not valid input. Please enter a numeric value: ");
                     numInput1 = Console.ReadLine();
                 }
+            }
+            else
+            {
+                cleanNum1 = res;
             }
 
             // Ask the user to type the second number.
@@ -153,6 +93,81 @@ class Program
         }
         calc.Finish();
         return;
+    }
+
+    internal static double ShowMenu(ref Calculator calc)
+    {
+        double res = 0;
+
+        Console.WriteLine("Choose 'n' to make a new calculation or 'v' to view your latest calculations\n");
+        var choice = Console.ReadLine().ToLower().Trim();
+
+        while (choice != "n" && choice != "v")
+        {
+            Console.WriteLine("Invalid input. Try Again.");
+            choice = Console.ReadLine().ToLower().Trim();
+        }
+
+        if (choice == "v")
+        {
+            Console.Clear();
+            Console.WriteLine("Latest Calculations:\n");
+
+            List<string> list = calc.GetLatestsCalculations();
+
+            if (list == null)
+            {
+                Console.WriteLine("List is empty");
+            }
+            else
+            {
+                foreach (var c in list)
+                {
+                    Console.WriteLine(c);
+                }
+
+                Console.WriteLine("Press 'd' to delete the list");
+                Console.WriteLine("'n' to start a new calculation");
+                Console.WriteLine("'u' to use one of the latest results to make a new operation");
+                var input = Console.ReadLine().ToLower().Trim();
+
+                while (input != "n" && input != "u" && input != "d")
+                {
+                    Console.WriteLine("Invalid input");
+                    input = Console.ReadLine().ToLower();
+                }
+
+                if (input == "d")
+                {
+                    calc.DeleteLists();
+                    Console.WriteLine("List Deleted");
+                    Console.ReadLine();
+                }
+
+                if (input == "u")
+                {
+                    Console.Clear();
+
+                    var listR = calc.GetLatestsResults();
+
+                    Console.WriteLine("Latest results: \n");
+                    foreach (var item in listR)
+                    {
+                        Console.Write($"{item}. y/n ");
+                        var c = Console.ReadLine().ToLower();
+
+                        if (c == "y")
+                        {
+                            res = item;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (res != 0) return res;
+        else return 0;
     }
 }
 
