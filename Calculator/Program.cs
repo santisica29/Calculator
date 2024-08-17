@@ -57,8 +57,7 @@ class Program
             Console.WriteLine("------------------------\n");
 
             // Wait for the user to respond before closing.
-            Console.Write(@"Press 'n' and Enter to close the app, or press any other key and Enter to continue: ");
-            if (Console.ReadLine().ToLower() == "n") endApp = true;
+            endApp = Helpers.IsCalculationComplete();
 
             Console.WriteLine("\n"); // Friendly linespacing;
         }

@@ -109,4 +109,12 @@ internal class Helpers
 
         return input;
     }
+
+    public static bool IsCalculationComplete()
+    {
+        Console.Write(@"Press 'n' and Enter to close the app, or press any other key and Enter to continue: ");
+
+        if (Console.ReadLine().ToLower() == "n") return true;
+        else return false;
+    }
 }
