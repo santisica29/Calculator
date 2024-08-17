@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace CalculatorHelpers;
+namespace CalculatorProgram;
 
 internal class Helpers
 {
