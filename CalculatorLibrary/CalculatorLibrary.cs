@@ -1,12 +1,14 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Newtonsoft.Json;
 
 namespace CalculatorLibrary;
 public class Calculator
 {
     int timesCalcWasUsed = 0;
-    List<string> latestCalculations = new();
-    List<double> latestResults = new List<double>();
+    static List<string> latestCalculations = new();
+    static List<double> latestResults = new List<double>();
 
     JsonWriter writer;
     public Calculator()
@@ -89,21 +91,69 @@ public class Calculator
         writer.WriteEndObject();
     }
 
-    public List<string> GetLatestsCalculations()
+    public static List<string> GetLatestsCalculations()
     {
         if (latestCalculations.Count == 0) return null;
 
         return latestCalculations;
     }
 
-    public List<double> GetLatestsResults()
+    public static void ShowLatestCalculations()
     {
-        if(latestResults.Count == 0) return null;
-        
+        Console.Clear();
+
+        var lC = GetLatestsCalculations();
+
+        if (lC == null)
+        {
+            Console.WriteLine("List is empty\n");
+            Console.WriteLine("'n' to start a new calculation");
+        }
+        else
+        {
+            Console.WriteLine("Latest Calculations:\n");
+            foreach (var c in lC)
+            {
+                Console.WriteLine(c);
+            }
+
+            Console.WriteLine("\nPress 'd' to delete the list");
+            Console.WriteLine("'n' to start a new calculation");
+            Console.WriteLine("'u' to use one of the latest results to make a new operation");
+        }
+    }
+    public static List<double> GetLatestsResults()
+    {
+        if (latestResults.Count == 0) return null;
+
         return latestResults;
     }
 
-    public void DeleteLists()
+    public static double ShowAndUseLatestResults()
+    {
+        Console.Clear();
+        var lR = GetLatestsResults();
+        double num = 0;
+
+        if (lR == null) return num;
+
+        Console.WriteLine("Latest results: \n");
+        foreach (var item in lR)
+        {
+            Console.Write($"{item}. y/n ");
+            var c = Console.ReadLine().ToLower();
+
+            if (c == "y")
+            {
+                num = item;
+                break;
+            }
+        }
+
+        return num;
+    }
+
+    public static void DeleteLists()
     {
         latestCalculations.Clear();
         latestResults.Clear();
